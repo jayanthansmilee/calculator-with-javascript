@@ -1,18 +1,21 @@
- const display = document.querySelector('input[name="dispaly"]');
-const buttons = document.querySelectorAll('.btn');
-
- buttons.forEach(button => {
-    button.addEventListener('click', () => {
-        const value = button.value;
-
-        if (value === '=') {
-            // Evaluate the expression in the display field
-            display.value = eval(display.value);
-        } else if (value === 'c') {
-            // Clear the display field
-            display.value = '';
-        } else {
-             display.value += value;
-        }
-    });
+const display = document.querySelector(".display");
+const buttons = document.querySelectorAll("button");
+const specialChars = ["%", "*", "/", "-", "+", "="];
+let output = "";
+ const calculate = (btnValue) => {
+  display.focus();
+  if (btnValue === "=" && output !== "") {
+     output = eval(output.replace("%", "/100"));
+  } else if (btnValue === "AC") {
+    output = "";
+  } else if (btnValue === "DEL") {
+     output = output.toString().slice(0, -1);
+  } else {
+     if (output === "" && specialChars.includes(btnValue)) return;
+    output += btnValue;
+  }
+  display.value = output;
+};
+ buttons.forEach((button) => {
+   button.addEventListener("click", (e) => calculate(e.target.dataset.value));
 });
